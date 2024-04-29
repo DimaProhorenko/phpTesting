@@ -2,6 +2,9 @@
 
 namespace Core;
 
+use Core\Exceptions\RouteException;
+use Core\Middleware\Middleware;
+
 class Router
 {
     private array $routes = [];
@@ -16,6 +19,20 @@ class Router
             'middleware' => null,
         ];
         return $this;
+    }
+
+    public function route($uri, $method)
+    {
+        foreach ($this->routes as $route) {
+            if ($route['uri'] === $uri && $route['method'] === strtoupper($method)) {
+                if ($route['middleware']) {
+                    Middleware::resolve($route['middleware']);
+                }
+                return require base_path("Controllers/{$route['controller']}");
+            }
+        }
+
+        throw RouteException::notFound($uri, $method);
     }
 
     public function only($key)
