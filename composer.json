@@ -1,0 +1,19 @@
+{
+  "name": "bxleinx/php-testing",
+  "type": "project",
+  "authors": [
+    {
+      "name": "Dmitriy Prokhorenko",
+      "email": "dima.study.web@gmail.com"
+    }
+  ],
+  "require": {},
+  "autoload": {
+    "classmap": [
+      "Controllers",
+      "Views",
+      "Models",
+      "Core"
+    ]
+  }
+}
