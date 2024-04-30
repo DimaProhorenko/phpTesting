@@ -10,7 +10,7 @@ class Router
     private array $routes = [];
 
 
-    private function add($uri, $controller_path, $method)
+    public function add($uri, $controller_path, $method)
     {
         $this->routes[] = [
             'uri' => $uri,
@@ -64,5 +64,10 @@ class Router
     public function patch($uri, $controller_path)
     {
         return $this->add($uri, $controller_path, 'PATCH');
+    }
+
+    public function getRoutes(): array
+    {
+        return $this->routes;
     }
 }
