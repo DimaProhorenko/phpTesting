@@ -2,18 +2,25 @@
 
 namespace Tests\Unit;
 
+use Core\Exceptions\RouteException;
 use Core\Router;
 use PHPUnit\Framework\TestCase;
 
-use function PHPUnit\Framework\assertEquals;
 
 class RouterTest extends TestCase
 {
+    private Router $router;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->router = new Router();
+    }
 
     public function test_it_adds_a_route()
     {
-        $router = new Router();
-        $router->add('/', 'index.php', 'get');
+
+        $this->router->add('/', 'index.php', 'get');
         $expected = [
             'uri' => '/',
             'controller' => 'index.php',
@@ -21,13 +28,13 @@ class RouterTest extends TestCase
             'middleware' => null
         ];
 
-        $this->assertEquals($expected, $router->getRoutes()[0]);
+        $this->assertEquals($expected, $this->router->getRoutes()[0]);
     }
 
     public function test_it_adds_get_route()
     {
-        $router = new Router();
-        $router->get('/', 'index.php');
+
+        $this->router->get('/', 'index.php');
         $expected = [
             'uri' => '/',
             'controller' => 'index.php',
@@ -35,13 +42,13 @@ class RouterTest extends TestCase
             'middleware' => null
         ];
 
-        $this->assertEquals($expected, $router->getRoutes()[0]);
+        $this->assertEquals($expected, $this->router->getRoutes()[0]);
     }
 
     public function test_it_adds_post_route()
     {
-        $router = new Router();
-        $router->post('/', 'index.php');
+
+        $this->router->post('/', 'index.php');
         $expected = [
             'uri' => '/',
             'controller' => 'index.php',
@@ -49,13 +56,13 @@ class RouterTest extends TestCase
             'middleware' => null
         ];
 
-        $this->assertEquals($expected, $router->getRoutes()[0]);
+        $this->assertEquals($expected, $this->router->getRoutes()[0]);
     }
 
     public function test_it_adds_delete_route()
     {
-        $router = new Router();
-        $router->delete('/', 'index.php');
+
+        $this->router->delete('/', 'index.php');
         $expected = [
             'uri' => '/',
             'controller' => 'index.php',
@@ -63,13 +70,13 @@ class RouterTest extends TestCase
             'middleware' => null
         ];
 
-        $this->assertEquals($expected, $router->getRoutes()[0]);
+        $this->assertEquals($expected, $this->router->getRoutes()[0]);
     }
 
     public function test_it_adds_push_route()
     {
-        $router = new Router();
-        $router->push('/', 'index.php');
+
+        $this->router->push('/', 'index.php');
         $expected = [
             'uri' => '/',
             'controller' => 'index.php',
@@ -77,13 +84,13 @@ class RouterTest extends TestCase
             'middleware' => null
         ];
 
-        $this->assertEquals($expected, $router->getRoutes()[0]);
+        $this->assertEquals($expected, $this->router->getRoutes()[0]);
     }
 
     public function test_it_adds_patch_route()
     {
-        $router = new Router();
-        $router->patch('/', 'index.php');
+
+        $this->router->patch('/', 'index.php');
         $expected = [
             'uri' => '/',
             'controller' => 'index.php',
@@ -91,13 +98,13 @@ class RouterTest extends TestCase
             'middleware' => null
         ];
 
-        $this->assertEquals($expected, $router->getRoutes()[0]);
+        $this->assertEquals($expected, $this->router->getRoutes()[0]);
     }
 
     public function test_it_adds_only_middleware()
     {
-        $router = new Router();
-        $router->get('/', 'index.php')->only('Auth');
+
+        $this->router->get('/', 'index.php')->only('Auth');
         $expected = [
             'uri' => '/',
             'controller' => 'index.php',
@@ -105,6 +112,32 @@ class RouterTest extends TestCase
             'middleware' => 'Auth'
         ];
 
-        $this->assertEquals($expected, $router->getRoutes()[0]);
+        $this->assertEquals($expected, $this->router->getRoutes()[0]);
+    }
+
+    public function test_there_are_no_routes()
+    {
+        $this->router = new Router();
+        $this->assertEmpty($this->router->getRoutes());
+    }
+
+    /** @dataProvider routeNotFoundCases */
+    public function test_it_throws_route_not_found_exception($uri, $method)
+    {
+        $this->router->get('/users', 'users.php');
+        $this->router->post('/help', 'help.php');
+
+        $this->expectException(RouteException::class);
+        $this->router->route($uri, $method);
+    }
+
+    public static function routeNotFoundCases(): array
+    {
+        return [
+            ['/users', 'post'],
+            ['/help', 'patch'],
+            ['/user', 'get'],
+            ['/help', 'get']
+        ];
     }
 }
