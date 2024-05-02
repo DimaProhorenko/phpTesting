@@ -1,9 +1,9 @@
 <?php
 
-namespace Core;
+namespace app\Core;
 
-use Core\Exceptions\RouteException;
-use Core\Middleware\Middleware;
+use app\Core\Exceptions\RouteException;
+use app\Core\Middleware\Middleware;
 
 class Router
 {
@@ -28,7 +28,7 @@ class Router
                 if ($route['middleware']) {
                     Middleware::resolve($route['middleware']);
                 }
-                return require base_path("Controllers/{$route['controller']}");
+                return require base_path("app/Controllers/{$route['controller']}");
             }
         }
 

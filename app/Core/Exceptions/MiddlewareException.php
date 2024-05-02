@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Exceptions;
+namespace app\Core\Exceptions;
 
 class MiddlewareException extends \Exception
 {

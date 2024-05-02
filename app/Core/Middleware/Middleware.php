@@ -1,8 +1,8 @@
 <?php
 
-namespace Core\Middleware;
+namespace app\Core\Middleware;
 
-use Core\Exceptions\MiddlewareException;
+use app\Core\Exceptions\MiddlewareException;
 
 class Middleware
 {

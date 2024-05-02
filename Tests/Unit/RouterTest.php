@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use Core\Exceptions\RouteException;
-use Core\Router;
+use app\Core\Exceptions\RouteException;
+use app\Core\Router;
 use PHPUnit\Framework\TestCase;
 
 

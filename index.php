@@ -1,10 +1,10 @@
 <?php
 
-use Core\Router;
+use App\Core\Router;
 
 const BASE_PATH = __DIR__;
 require __DIR__ . '/vendor/autoload.php';
-require __DIR__ . '/helpers/utils.php';
+require __DIR__ . '/app/helpers/utils.php';
 
 $router = new Router();
 require __DIR__ . '/routes.php';
