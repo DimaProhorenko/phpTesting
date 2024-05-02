@@ -1,7 +1,9 @@
 <?php
 
 use app\App;
+use app\Container;
 use app\Core\Invoice;
+use app\Core\Services\EmailService;
 
 echo 'Invoice';
-App::container()->get(Invoice::class)->process([], 234);
+(new Container())->get(Invoice::class)->process([], 245);

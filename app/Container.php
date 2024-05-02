@@ -17,7 +17,7 @@ class Container implements ContainerInterface
 
             return $entry($this);
         }
-        $this->resolve($id);
+        return $this->resolve($id);
     }
 
     public function has(string $id): bool
@@ -55,8 +55,19 @@ class Container implements ContainerInterface
             $type = $param->getType();
 
             if (!$type) {
-                throw new ContainerException("Failed to resolve class {$id} because parameter ${name} is missing type hint");
+                throw new ContainerException("Failed to resolve class {$id} because parameter {$name} is missing type hint");
             }
+
+            if ($type instanceof \ReflectionUnionType) {
+                throw new ContainerException("Failed to resolve class {$id} because parameter {$name} is of union type");
+            }
+
+            if ($type instanceof \ReflectionNamedType && !$type->isBuiltin()) {
+                return $this->get($type->getName());
+            }
+
+            throw new ContainerException("Failed to resolve class {$id} because parameter {$name} is invalid");
         }, $parameters);
+        return $reflectionClass->newInstanceArgs($dependencies);
     }
 }
