@@ -19,6 +19,8 @@ class Invoice
             return false;
         }
 
+        echo 'Invoice has been processed';
+
         $this->emailService->send($customer);
         return true;
     }
